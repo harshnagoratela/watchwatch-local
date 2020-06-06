@@ -55,7 +55,7 @@ const Index = ({ data }) => {
 
   //filtering home and food items maximum to 6 items
   rowEdges.map((edge) => {
-    if(edge.node.category && edge.node.category != "" && listEdges.length<maxItems) {
+    if (edge.node.category && edge.node.category != "" && listEdges.length < maxItems) {
       listEdges.push(edge);
     }
 
@@ -67,13 +67,12 @@ const Index = ({ data }) => {
       <Header title="documenting unnecessary police violence"></Header>
 
 
-      <div class="center">
+      <div className="center">
 
       </div>
-      <div class="search_main">
-            <Search collapse homepage indices={searchIndices} />
-
-            </div>
+      <div className="search_main">
+        <Search collapse homepage indices={searchIndices} />
+      </div>
 
       <ShopSectionHeading></ShopSectionHeading>
 
@@ -86,7 +85,7 @@ const Index = ({ data }) => {
               cover={node.localImageUrl && node.localImageUrl.childImageSharp.fluid}
               path={`/${node.slug}`}
               title={node.name}
-              excerpt={node.about && node.about.substring(0,40)+"..."}
+              excerpt={node.about && node.about.substring(0, 40) + "..."}
             />
           );
         })}
@@ -151,7 +150,7 @@ export const query = graphql`
     }
 
     allGoogleSheetListRow(
-      limit: 90
+      limit: 9
     )
     {
       edges {

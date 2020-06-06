@@ -1,7 +1,6 @@
 const path = require('path');
 const _ = require("lodash");
 const fetch = require("node-fetch");
-const FeedParser = require("feedparser");
 
 exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions
@@ -16,7 +15,10 @@ exports.createSchemaCustomization = ({ actions }) => {
       youtube_link: String
       comment: String
       slug: String
-
+      fields: fields
+    }
+    type fields {
+      tweetEmbedData: String
     }
   `)
 }
@@ -213,6 +215,69 @@ exports.createPages = ({ graphql, actions }) => {
 
   });
 };
+
+const momentRegexp = /https:\/\/twitter.com\/i\/moments\/[0-9]+/i;
+const tweetRegexp = /https:\/\/twitter\.com\/[A-Za-z0-9-_]*\/status\/[0-9]+/i;
+
+const isTwitterLink = (url) => {
+  return url &&
+    (tweetRegexp.test(url) ||
+     momentRegexp.test(url));
+}
+
+const getTweetBlockquote = async (url, opt) => {
+  const apiUrl = `https://publish.twitter.com/oembed?url=${
+    url
+  }&hide_thread=${
+    opt.hideThread !== false ? '1' : '0'
+  }&align=${
+    opt.align || ''
+  }&hide_media=${
+    opt.hideMedia ? '1' : '0'
+  }&theme=${
+    opt.theme || ''
+  }&link_color=${
+    opt.linkColor || ''
+  }&widget_type=${
+    opt.widgetType || ''
+  }&omit_script=true&dnt=true&limit=20&chrome=nofooter`
+
+  const response = await fetch(apiUrl);
+  if (response.status !== 200) {
+    console.warn("** Bad status code from twitter url '"+url+"' : "+response.status);
+    return null;
+  }
+  return await response.json();
+};
+
+exports.onCreateNode = async ({ node, actions }) => {
+  const { createNodeField } = actions
+  if (node.internal
+      && node.internal.owner === 'gatsby-source-google-sheets'
+      && node.url
+      && node.url.startsWith("http")
+  ) {
+    const tweetLink = node.url;
+    console.log("******* Tweet URL = "+tweetLink);
+    let embedDataHTML = "";
+    try {
+      if(isTwitterLink(tweetLink)){
+        const embedData = await getTweetBlockquote(tweetLink, []);
+        embedDataHTML = embedData ? embedData.html : ""
+      } else {
+        console.warn('SKIPPING NON-TWITTER url = '+tweetLink)
+      }
+    } catch (er) {
+      console.warn(`failed to get blockquote for ${tweetLink}`, er)
+    }
+    createNodeField({
+        name: 'tweetEmbedData', // field name
+        node, // the node on which we want to add a custom field
+        value: embedDataHTML // field value
+    });
+  }
+};
+
 
 /* Allows named imports */
 exports.onCreateWebpackConfig = ({ actions }) => {
