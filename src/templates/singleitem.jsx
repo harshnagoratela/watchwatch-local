@@ -120,11 +120,7 @@ const SingleItem = ({ data, pageContext }) => {
         </div>
         <TagsBlock list={tagsList || []} />
         <Content input={about} /><br />
-        {/*
-        <video controls>
-          <source src={`/media/Greg Doucette #${date} - ${city} ${state}.mp4`} type="video/mp4" />
-        </video>
-        */}
+        <Content input={fields.youtubeEmbedData} /><br />
         <Content input={fields.tweetEmbedData} /><br />
 
         <a target="_blank" href={url} className="button">View on Twitter</a> <a href="/random" className="button buttonalt">See another incident</a>
@@ -165,9 +161,11 @@ export const query = graphql`
       url
       fields {
         tweetEmbedData
+        youtubeEmbedData
       }
       mediafile
-      youtube_link
+      youtubelink
+      tags
       about
       slug
       imageurl

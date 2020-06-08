@@ -58,6 +58,7 @@ typings/
 .env
 
 .cache/
+static/media/
 public
 yarn-error.log
 .tern-port

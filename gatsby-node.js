@@ -49,9 +49,11 @@ exports.createPages = ({ graphql, actions }) => {
                   state
                   tweet_url
                   media_filename
-                  youtube_link
+                  youtubelink
                   comment
                   slug
+                  tags
+                  imageurl
                 }
               }
             }
@@ -250,18 +252,65 @@ const getTweetBlockquote = async (url, opt) => {
   return await response.json();
 };
 
+const isYoutubeLink = (url) => {
+  const { host, pathname, searchParams } = new URL(url);
+  return (
+    host === 'youtu.be' ||
+    (['youtube.com', 'www.youtube.com'].includes(host) &&
+      pathname.includes('/watch') &&
+      Boolean(searchParams.get('v')))
+  );
+}
+const getYoutubeTimeValueInSeconds = (timeValue) => {
+  if (Number(timeValue).toString() === timeValue) {
+    return timeValue;
+  }
+  const {
+    2: hours = '0',
+    4: minutes = '0',
+    6: seconds = '0',
+  } = timeValue.match(/((\d*)h)?((\d*)m)?((\d*)s)?/);
+  return String((Number(hours) * 60 + Number(minutes)) * 60 + Number(seconds));
+};
+const getYouTubeIFrameSrc = (urlString) => {
+  const url = new URL(urlString);
+  let id = url.searchParams.get('v');
+  if (url.host === 'youtu.be') {
+    id = url.pathname.slice(1);
+  }
+  const embedUrl = new URL(
+    `https://www.youtube-nocookie.com/embed/${id}?rel=0`
+  );
+  url.searchParams.forEach((value, name) => {
+    if (name === 'v') {
+      return;
+    }
+    if (name === 't') {
+      embedUrl.searchParams.append('start', getTimeValueInSeconds(value));
+    } else {
+      embedUrl.searchParams.append(name, value);
+    }
+  });
+  return embedUrl.toString();
+};
+const getYouTubeEmbedHTML = (url) => {
+  const iframeSrc = getYouTubeIFrameSrc(url);
+  return `<iframe width="100%" height="315" src="${iframeSrc}" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>`;
+};
+
 exports.onCreateNode = async ({ node, actions }) => {
   const { createNodeField } = actions
+  //handling tweets
   if (node.internal
       && node.internal.owner === 'gatsby-source-google-sheets'
       && node.url
       && node.url.startsWith("http")
   ) {
     const tweetLink = node.url;
-    console.log("******* Tweet URL = "+tweetLink);
     let embedDataHTML = "";
     try {
       if(isTwitterLink(tweetLink)){
+        console.log("******* Tweet URL = "+tweetLink);
         const embedData = await getTweetBlockquote(tweetLink, []);
         embedDataHTML = embedData ? embedData.html : ""
       } else {
@@ -272,6 +321,32 @@ exports.onCreateNode = async ({ node, actions }) => {
     }
     createNodeField({
         name: 'tweetEmbedData', // field name
+        node, // the node on which we want to add a custom field
+        value: embedDataHTML // field value
+    });
+  }
+
+  //handling youtube videos
+  if (node.internal
+      && node.internal.owner === 'gatsby-source-google-sheets'
+      && node.youtubelink
+      && node.youtubelink.startsWith("http")
+  ) {
+    const youtubeLink = node.youtubelink;
+    let embedDataHTML = "";
+    try {
+      if(isYoutubeLink(youtubeLink)){
+        console.log("******* Youtube Link = "+youtubeLink);
+        const embedData = getYouTubeEmbedHTML(youtubeLink);
+        embedDataHTML = embedData || "";
+      } else {
+        console.warn('SKIPPING NON-YOUTUBE Link = '+youtubeLink)
+      }
+    } catch (er) {
+      console.warn(`failed to get embed for ${youtubeLink}`, er)
+    }
+    createNodeField({
+        name: 'youtubeEmbedData', // field name
         node, // the node on which we want to add a custom field
         value: embedDataHTML // field value
     });

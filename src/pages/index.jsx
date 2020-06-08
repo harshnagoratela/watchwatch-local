@@ -48,18 +48,24 @@ const Index = ({ data }) => {
   const rowEdges = data.allGoogleSheetListRow.edges;
   const listEdges = [];
   const maxItems = 9;
+  const [limit, setLimit] = React.useState(maxItems);
+  const [showMore, setShowMore] = React.useState(true);
 
   const searchIndices = [
     { name: `watchwatch`, title: `Shops`, type: `shopHit` },
   ]
 
+  const increaseLimit = () => {
+      setLimit(limit + maxItems);
+  }
+
   //filtering home and food items maximum to 6 items
   rowEdges.map((edge) => {
-    if (edge.node.category && edge.node.category != "" && listEdges.length < maxItems) {
+    if (edge.node.category && edge.node.category != "" && listEdges.length < limit) {
       listEdges.push(edge);
     }
-
   })
+  if(listEdges.length >= rowEdges.length) setShowMore(false);
 
   return (
     <Layout>
@@ -67,9 +73,6 @@ const Index = ({ data }) => {
       <Header title="documenting unnecessary police violence"></Header>
 
 
-      <div className="center">
-
-      </div>
       <div className="search_main">
         <Search collapse homepage indices={searchIndices} />
       </div>
@@ -89,8 +92,14 @@ const Index = ({ data }) => {
             />
           );
         })}
-      </ShopWrapper>
-
+      </ShopWrapper>      
+      {showMore && listEdges.length > 0 && 
+        <div className="center">        
+            <a className="button" onClick={increaseLimit} style={{cursor: "pointer"}}>
+                Load More
+            </a>
+        </div>
+      }
     </Layout>
   );
 };
@@ -121,7 +130,7 @@ Index.propTypes = {
 export const query = graphql`
   query {
     allMarkdownRemark(
-      limit: 9
+      limit: 90
       sort: { order: DESC, fields: [frontmatter___date] }
     ) {
       edges {
@@ -140,7 +149,7 @@ export const query = graphql`
                   quality: 90
                   traceSVG: { color: "#2B2B2F" }
                 ) {
-                  ...GatsbyImageSharpFluid_withWebp_tracedSVG
+                  ...GatsbyImageSharpFluid_tracedSVG
                 }
               }
             }
@@ -149,9 +158,7 @@ export const query = graphql`
       }
     }
 
-    allGoogleSheetListRow(
-      limit: 9
-    )
+    allGoogleSheetListRow
     {
       edges {
         node {
@@ -167,10 +174,10 @@ export const query = graphql`
             childImageSharp {
               fluid(
                 maxWidth: 1000
-                quality: 100
+                quality: 90
                 traceSVG: { color: "#2B2B2F" }
               ) {
-                ...GatsbyImageSharpFluid_withWebp_tracedSVG
+                ...GatsbyImageSharpFluid_tracedSVG
               }
             }
           }
