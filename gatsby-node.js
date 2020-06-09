@@ -305,7 +305,9 @@ const getYouTubeEmbedHTML = (url) => {
 };
 
 const getHTML5VideoEmbedHTML = (url) => {
-  return `<video controls><source src=${url} type="video/mp4">Your browser does not support the video tag.</video>`;
+    console.warn("+++++++++ "+url)
+  if(!url || !url.includes('.mp4')) {return ""}
+  return `<video width="50%" controls><source src=${url} type="video/mp4">Your browser does not support the video tag.</video>`;
 };
 
 exports.onCreateNode = async ({ node, actions }) => {
@@ -370,12 +372,12 @@ exports.onCreateNode = async ({ node, actions }) => {
       && node.internal.owner === 'gatsby-source-google-sheets'
       && node.mediafile
       && node.mediafile.startsWith("http")
-      && node.mediafile.endsWith("mp4")
   ) {
-    const videoLink = node.media;
+    const videoLinks = node.mediafile;
     let embedDataHTML = "";
     try {
-        const embedData = getHTML5VideoEmbedHTML(videoLink);
+        videos = videoLinks ? videoLinks.split(",") : [];
+        const embedData = videos.length>0 ? getHTML5VideoEmbedHTML(videos[0]):"";
         embedDataHTML = embedData || "";
     } catch (er) {
       console.warn(`failed to get embed for ${videoLink}`, er)

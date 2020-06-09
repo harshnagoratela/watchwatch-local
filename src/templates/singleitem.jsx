@@ -119,10 +119,9 @@ const SingleItem = ({ data, pageContext }) => {
           </div>
         </div>
         <TagsBlock list={tagsList || []} />
-
-        <Content input={fields.youtubeEmbedData} /><br />
-        <Content input={fields.videoEmbedData} /><br />        
         <Content input={about} /><br />
+        <Content input={fields.youtubeEmbedData} /><br />
+        <Content input={fields.videoEmbedData} /><br />
         <Content input={fields.tweetEmbedData} /><br />
 
          <a href="/random" className="button ">See another incident</a> <a target="_blank" href={url} className="button buttonalt">View on Twitter</a>
