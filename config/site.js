@@ -6,8 +6,8 @@ module.exports = {
   url: 'https://watchwatch.org', // Domain of your site. No trailing slash!
   siteUrl: 'https://watchwatch.org/', // url + pathPrefix
   siteLanguage: 'en', // Language Tag on <html> element
-  logo: 'static/logo/logo.png', // Used for SEO
-  banner: 'static/logo/logo.png',
+  logo: '/static/logo/logo.png', // Used for SEO
+  banner: '/static/logo/logo.png',
   // JSONLD / Manifest
   favicon: 'static/logo/favicon.png', // Used for manifest favicon generation
   shortName: 'watchwatch', // shortname for manifest. MUST be shorter than 12 characters

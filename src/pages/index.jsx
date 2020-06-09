@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from '@emotion/styled';
 import { Header, PostList } from 'components';
+import CityCount from '../components/CityCount';
 import { Layout } from 'layouts';
+import _ from 'lodash';
 import Search from 'components/search'
 
 const PostSectionHeading = styled.h1`
@@ -29,6 +31,10 @@ const ShopSectionHeading = styled.h1`
   margin-left: 4rem;
 `;
 
+const ShopSectionSubHeading = styled.h3`
+  margin-left: 4rem;
+`;
+
 const ShopWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -50,6 +56,10 @@ const Index = ({ data }) => {
   const maxItems = 12;
   const [limit, setLimit] = React.useState(maxItems);
   const [showMore, setShowMore] = React.useState(true);
+
+  const { group } = data.citygroup;
+  const cityMapDescSorted = _.orderBy(group, ['totalCount'],['desc']).slice(0,5);
+
 
   const searchIndices = [
     { name: `watchwatch`, title: `incidents`, type: `hit` },
@@ -82,9 +92,16 @@ const Index = ({ data }) => {
       <p>data compiled by <a href="https://twitter.com/jasonemiller" target="_twitter" rel="noopener">@jasonemiiller</a> in a <a href="https://docs.google.com/spreadsheets/d/1YmZeSxpz52qT-10tkCjWOwOGkQqle7Wd1P7ZM1wMW0E/edit#gid=0" target="_twitter" rel="noopener">google spreadsheet</a></p>
       </div>
 
-      <ShopSectionHeading>
-      <h3>Latest incidents</h3>
-      </ShopSectionHeading>
+      <ShopSectionSubHeading>
+        Top 5 Cities
+      </ShopSectionSubHeading>
+      <ShopWrapper style={{marginTop: "0rem", marginLeft: "3.25rem"}}>
+        <CityCount list={cityMapDescSorted} />
+      </ShopWrapper>
+
+      <ShopSectionSubHeading>
+        Latest incidents
+      </ShopSectionSubHeading>
       <ShopWrapper>
 
         {listEdges.map(({ node }) => {
@@ -161,6 +178,13 @@ export const query = graphql`
             }
           }
         }
+      }
+    }
+
+    citygroup : allGoogleSheetListRow {
+     group(field: city) {
+        totalCount
+        fieldValue
       }
     }
 
