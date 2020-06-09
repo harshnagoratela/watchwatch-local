@@ -47,12 +47,12 @@ const Index = ({ data }) => {
   const { edges } = data.allMarkdownRemark;
   const rowEdges = data.allGoogleSheetListRow.edges;
   const listEdges = [];
-  const maxItems = 9;
+  const maxItems = 12;
   const [limit, setLimit] = React.useState(maxItems);
   const [showMore, setShowMore] = React.useState(true);
 
   const searchIndices = [
-    { name: `watchwatch`, title: `Shops`, type: `shopHit` },
+    { name: `watchwatch`, title: `incidents`, type: `hit` },
   ]
 
   const increaseLimit = () => {
@@ -70,15 +70,21 @@ const Index = ({ data }) => {
   return (
     <Layout>
       <Helmet title={'WatchWatch.org'} />
-      <Header title="documenting unnecessary police violence"></Header>
+      <Header title="documenting violence by law enforcement against civilians"></Header>
 
 
       <div className="search_main">
         <Search collapse homepage indices={searchIndices} />
       </div>
+      <div className="text_main center">
+      <p>watchwatch.org documents unnecessary violence by law enforcement officers against civilians</p>
+      <p>inspired by the <a href="https://twitter.com/greg_doucette/status/1266751520055459847" target="_twitter" rel="noopener">massive twitter thread</a> by <a href="https://twitter.com/greg_doucette/" target="_twitter" rel="noopener">@greg_doucette</a></p>
+      <p>data compiled by <a href="https://twitter.com/jasonemiller" target="_twitter" rel="noopener">@jasonemiiller</a> in a <a href="https://docs.google.com/spreadsheets/d/1YmZeSxpz52qT-10tkCjWOwOGkQqle7Wd1P7ZM1wMW0E/edit#gid=0" target="_twitter" rel="noopener">google spreadsheet</a></p>
+      </div>
 
-      <ShopSectionHeading></ShopSectionHeading>
-
+      <ShopSectionHeading>
+      <h3>Latest incidents</h3>
+      </ShopSectionHeading>
       <ShopWrapper>
 
         {listEdges.map(({ node }) => {
@@ -92,9 +98,9 @@ const Index = ({ data }) => {
             />
           );
         })}
-      </ShopWrapper>      
-      {showMore && listEdges.length > 0 && 
-        <div className="center">        
+      </ShopWrapper>
+      {showMore && listEdges.length > 0 &&
+        <div className="center">
             <a className="button" onClick={increaseLimit} style={{cursor: "pointer"}}>
                 Load More
             </a>
@@ -130,8 +136,8 @@ Index.propTypes = {
 export const query = graphql`
   query {
     allMarkdownRemark(
-      limit: 90
-      sort: { order: DESC, fields: [frontmatter___date] }
+      limit: 6
+      sort: { order: ASC, fields: [frontmatter___date] }
     ) {
       edges {
         node {
@@ -158,10 +164,13 @@ export const query = graphql`
       }
     }
 
-    allGoogleSheetListRow
+    allGoogleSheetListRow(
+      sort: { order: DESC, fields: date }
+    )
     {
       edges {
         node {
+          date
           name
           url
           slug

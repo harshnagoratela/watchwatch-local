@@ -300,13 +300,14 @@ const getYouTubeEmbedHTML = (url) => {
 
 exports.onCreateNode = async ({ node, actions }) => {
   const { createNodeField } = actions
-  //handling tweets
+    //handling tweets
   if (node.internal
       && node.internal.owner === 'gatsby-source-google-sheets'
       && node.url
       && node.url.startsWith("http")
   ) {
     const tweetLink = node.url;
+
     let embedDataHTML = "";
     try {
       if(isTwitterLink(tweetLink)){
@@ -325,7 +326,7 @@ exports.onCreateNode = async ({ node, actions }) => {
         value: embedDataHTML // field value
     });
   }
-
+  
   //handling youtube videos
   if (node.internal
       && node.internal.owner === 'gatsby-source-google-sheets'

@@ -1,3 +1,7 @@
+# large media file
+media/
+content/media/
+
 # Logs
 logs
 *.log
@@ -58,7 +62,6 @@ typings/
 .env
 
 .cache/
-static/media/
 public
 yarn-error.log
 .tern-port

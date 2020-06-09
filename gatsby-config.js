@@ -19,16 +19,11 @@ module.exports = {
         path: `${__dirname}/content/posts`,
       },
     },
-    'gatsby-plugin-react-helmet',
     {
-    resolve: '@fs/gatsby-plugin-drive',
-    options: {
-      folderId: '1zniqs5KlQJffey_FOHDlb-Ghy0Hikl_w',
-      keyFile: `${__dirname}/client_secret.json`,
-      destination: `${__dirname}/static/media`,
-      exportGDocs: false,
-      exportMimeType: ''
-      }
+    resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: "UA-86276502-4",
+      },
     },
     'gatsby-transformer-sharp',
     {
