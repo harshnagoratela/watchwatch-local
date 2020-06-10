@@ -5,7 +5,7 @@
   "description": "documenting unnecessary police violence",
   "homepage": "https://watchwatch.org",
   "license": "MIT",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/ecomloop/watchwatch"
@@ -86,8 +86,8 @@
   "keywords": [
     "george floyd",
     "black lives matter",
-    "ecomloop",
-    "gatsby",
-    "police violence"
+    "defund police",
+    "peaceful protest",
+    "police brutality"
   ]
 }

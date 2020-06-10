@@ -80,16 +80,16 @@ const Index = ({ data }) => {
   return (
     <Layout>
       <Helmet title={'WatchWatch.org'} />
-      <Header title="documenting violence by law enforcement against civilians"></Header>
+      <Header title="documenting police brutality against lawful protesters"></Header>
 
 
       <div className="search_main">
         <Search collapse homepage indices={searchIndices} />
       </div>
       <div className="text_main center">
-      <p>watchwatch.org documents unnecessary violence by law enforcement officers against civilians</p>
+      <p>watchwatch.org documents police brutality against lawful protesters</p>
       <p>inspired by the <a href="https://twitter.com/greg_doucette/status/1266751520055459847" target="_twitter" rel="noopener">massive twitter thread</a> by <a href="https://twitter.com/greg_doucette/" target="_twitter" rel="noopener">@greg_doucette</a></p>
-      <p>data compiled by <a href="https://twitter.com/jasonemiller" target="_twitter" rel="noopener">@jasonemiiller</a> in a <a href="https://docs.google.com/spreadsheets/d/1YmZeSxpz52qT-10tkCjWOwOGkQqle7Wd1P7ZM1wMW0E/edit#gid=0" target="_twitter" rel="noopener">google spreadsheet</a></p>
+      <p>original data compiled by <a href="https://twitter.com/jasonemiller" target="_twitter" rel="noopener">@jasonemiiller</a> in a <a href="https://docs.google.com/spreadsheets/d/1YmZeSxpz52qT-10tkCjWOwOGkQqle7Wd1P7ZM1wMW0E/edit#gid=0" target="_twitter" rel="noopener">google spreadsheet</a></p>
       </div>
 
       <ShopSectionSubHeading>
