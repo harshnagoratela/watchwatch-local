@@ -1,9 +1,10 @@
 import React from 'react';
-import { Link } from 'gatsby';
+import { Link1 } from 'gatsby';
 import Img from 'gatsby-image';
 import styled from '@emotion/styled';
 import PropTypes from 'prop-types';
 import theme from '../../config/theme';
+import Link from "gatsby-plugin-transition-link"
 
 const Wrapper = styled.article`
   margin-bottom: 2rem;
@@ -116,7 +117,7 @@ const PostList = ({ cover, path, date, title, excerpt }) => (
         <img src={cover || {} || [] || ''} style={{height: '100%', objectFit: 'fill'}} />
       }
     </Image>
-    <StyledLink to={path}>
+    <StyledLink to={path} cover direction="right" duration={2} bg="yellow">
       <Info>
         <span>{date}</span>
         <Title>{title}</Title>
