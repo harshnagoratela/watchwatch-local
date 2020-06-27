@@ -63,7 +63,7 @@ const Tag = ({ pageContext }) => {
       <SEO
         title={`${title} | ${config.title}`}
       />
-      <Header title={upperTag} date="authoritarian acts & police violence incidents">
+      <Header title={upperTag} date="police violence incidents in BLM protests">
 
       </Header>
       <PostsWrapper>

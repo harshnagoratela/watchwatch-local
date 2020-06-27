@@ -247,9 +247,9 @@ const getTweetBlockquote = async (url, opt) => {
   }&hide_media=${
     opt.hideMedia ? '1' : '0'
   }&theme=${
-    opt.theme || ''
+    opt.theme || 'dark'
   }&link_color=${
-    opt.linkColor || ''
+    opt.linkColor || '#fee12b'
   }&widget_type=${
     opt.widgetType || ''
   }&data-cards=${
