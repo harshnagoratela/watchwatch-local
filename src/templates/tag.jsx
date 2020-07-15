@@ -51,27 +51,12 @@ const Tag = ({ pageContext }) => {
 
   const listEdges = [];
   const rowEdges = twitterData.allGoogleSheetListRow.edges;
-  const maxItems = 15;
-  const [limit, setLimit] = React.useState(maxItems);
-  const [showMore, setShowMore] = React.useState(true);
   //filtering based of current tags only
   rowEdges.map((edge) => {
-    if (postIDs.indexOf(edge.node.id)>=0 && listEdges.length < limit) {
+    if (postIDs.indexOf(edge.node.id)>=0) {
       listEdges.push(edge);
     }
   })
-  if (listEdges.length >= rowEdges.length) setShowMore(false);
-
-  const increaseLimit = () => {
-    setLimit(limit + maxItems);
-    if (
-      typeof twttr !== `undefined` &&
-      window.twttr.widgets &&
-      typeof window.twttr.widgets.load === `function`
-    ) {
-      window.twttr.widgets.load()
-    }
-  }
 
   return (
     <Layout>
@@ -93,14 +78,7 @@ const Tag = ({ pageContext }) => {
           );
         })}
       </PostsWrapper>
-      {showMore && listEdges.length > 0 && limit <= listEdges.length &&
-        <div className="center">
-          <a className="button" onClick={increaseLimit} style={{ cursor: "pointer" }}>
-            Load More
-            </a>
-        </div>
-      }
-      <br/>
+
     </Layout>
   );
 };
