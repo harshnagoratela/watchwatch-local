@@ -8,9 +8,11 @@ import CityCount from '../components/CityCount';
 import { Layout } from 'layouts';
 import _ from 'lodash';
 import Search from 'components/search'
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
 
 const PostSectionHeading = styled.h1`
-  margin-left: 4rem;
+  margin-top: 4rem;
 `;
 
 const PostWrapper = styled.div`
@@ -28,11 +30,11 @@ const PostWrapper = styled.div`
 `;
 
 const ShopSectionHeading = styled.h1`
-  margin-left: 4rem;
+  margin-top: 4rem;
 `;
 
 const ShopSectionSubHeading = styled.h3`
-  margin-left: 4rem;
+  margin-top: 4rem;
 `;
 
 const ShopWrapper = styled.div`
@@ -69,6 +71,7 @@ const Index = ({ data }) => {
   const maxItems = 15;
   const [limit, setLimit] = React.useState(maxItems);
   const [showMore, setShowMore] = React.useState(true);
+  const [open, setOpen] = React.useState(false)
 
   const { group } = data.citygroup;
   const cityMapDescSorted = _.orderBy(group, ['totalCount'], ['desc']).slice(0, 10);
@@ -100,8 +103,8 @@ const Index = ({ data }) => {
 
   return (
     <Layout>
-      <Helmet title={'WatchWatch.org'} />
-      <Header title="reject authoritarianism" date="watchwatch documents authoritarian acts & police violence incidents"></Header>
+      <Helmet title={'WatchWatch Police Brutality Cases | Police Violence '} />
+      <Header title="WatchWatch Police Brutality Cases" date=""></Header>
 
 
       <div className="search_main">
@@ -113,25 +116,40 @@ const Index = ({ data }) => {
         </div>
         <Search collapse homepage indices={searchIndices} />
       </div>
-
-
-      <ShopSectionSubHeading>
-        Top 10 Cities
+      <ShopSectionSubHeading style={{ marginTop: "5rem", 'text-align': "center" }}>
+        Police brutality cases are widespread.<br/>
       </ShopSectionSubHeading>
+      <ShopWrapper style={{ margin: "1rem auto", 'text-align': "center", width:"67%", display: "block" }}>
+      WatchWatch documents hundreds of cases of police violence and law enformcement brutality.
+      </ShopWrapper>
 
-      <ShopWrapper style={{ marginTop: "0rem", marginLeft: "3.25rem" }}>
+        <ShopWrapper style={{ margin: "3rem auto", 'text-align': "center", width:"67%", display: "block" }}>
+      <a href="/random" className="button ">WatchWatch a police brutality case</a><div></div>
+      <a className="button buttonalt" href="javascript:void(0)" onClick={() => setOpen(true)}>
+        Help end police Violence
+      </a>
+      <Modal open={open} onClose={() => setOpen(false)} center>
+        <h3>Police brutality cases are widespread!<br/>Help end police violence! </h3>
 
-        <CityCount list={cityMapDescSorted} />
-        <a class="button buttonalt" href="/cities">view all cities</a>
+        <p>
+          <strong>Color Of Change</strong> helps you do something real about injustice. They design campaigns powerful enough to end practices that unfairly hold Black people back, and champion solutions that move us all forward. Until justice is real.
+        </p>
+        <a target="_blank" href="https://colorofchange.org/" rel="noopener noreferrer" className="button">Support Color of Change</a>
+        <p>
+          <strong>Fair Fight</strong> workds to promote fair elections across the country. Voting is the bedrock on which our community’s future and your ambitions are built. Join the fight to ensure access to democracy for all.
+        </p>
+        <a target="_blank" href="https://fairfight.com/" rel="noopener noreferrer" className="button">Support Fair Fight</a>
+      </Modal>
       </ShopWrapper>
 
 
-      <ShopSectionSubHeading>
-        Latest incidents
+
+      <ShopSectionSubHeading style={{ margin: "8rem 0 0 0", 'text-align': "center", }}>
+        WatchWatch police brutality cases from <a href="/category/george-floyd-protests/">George Floyd protests</a>
 
       </ShopSectionSubHeading>
       <div className="text_main center">
-        incident numbers refer to <a href="https://twitter.com/greg_doucette/status/1266751520055459847">@greg_doucette's thread</a> of police violence against george floyd protesters
+        incident numbers refer to <a href="https://twitter.com/greg_doucette/status/1266751520055459847">@greg_doucette's thread</a> of police brutality incidents
     </div>
       <PostsWrapper>
         {listEdges.map(({ node }) => {
@@ -139,7 +157,7 @@ const Index = ({ data }) => {
             <PostList
               key={node.name}
               cover={node.localImageUrl && node.localImageUrl.childImageSharp.fluid}
-              path={`/${node.slug}`}
+              path={`/case/${node.slug}`}
               title={node.name}
               excerpt={node.about && node.about.substring(0, 40) + "..."}
               tweetdata={node.fields && node.fields.tweetEmbedData}
@@ -149,11 +167,15 @@ const Index = ({ data }) => {
       </PostsWrapper>
       {showMore && listEdges.length > 0 &&
         <div className="center">
-          <a className="button" onClick={increaseLimit} style={{ cursor: "pointer" }}>
+          <button className="button" onClick={increaseLimit} style={{ cursor: "pointer" }}>
             Load More
-            </a>
+            </button>
         </div>
       }
+
+
+
+
     </Layout>
   );
 };
