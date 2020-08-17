@@ -8,6 +8,9 @@ import { TagsBlock, Header, SEO } from 'components';
 import '../styles/prism';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
+import _ from 'lodash';
+
+
 
 const SuggestionBar = styled.div`
   display: flex;
@@ -132,7 +135,7 @@ const SingleItem = ({ data, pageContext }) => {
         <Content input={fields.videoEmbedData} /><br />
         <Content input={fields.tweetEmbedData} /><br />
 
-        <a href="/random" className="button ">See another police brutality case </a>
+        <a href="/random/" className="button ">See another police brutality case </a>
         <a className="button buttonalt" href="javascript:void(0)" onClick={() => setOpen(true)}>
           Help end police Violence
         </a>
