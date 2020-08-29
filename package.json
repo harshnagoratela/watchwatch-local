@@ -12,7 +12,7 @@
   },
   "scripts": {
     "develop": "gatsby develop",
-    "local": "gatsby develop -H 0.0.0.0",
+    "local": "gatsby develop -H 0.0.0.0 -p 3000",
     "build": "gatsby build",
     "serve": "gatsby serve",
     "clean": "rm -rf public && rm -rf .cache",
